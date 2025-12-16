@@ -1,0 +1,65 @@
+services:
+  neo4j:
+    container_name: ${PROJECT_NAME}_db
+    build:
+      context: .
+      dockerfile: neo4j/Dockerfile
+      args:
+        NEO4J_VERSION: ${NEO4J_VERSION}
+        N10S_VERSION: ${N10S_VERSION}
+    ports:
+      - "${NEO4J_HTTP_PORT}:7474"
+      - "${NEO4J_BOLT_PORT}:7687"
+    volumes:
+      - ./data:/data
+      - ./logs:/logs
+      - ./conf:/conf
+      - ./import:/var/lib/neo4j/import
+      # Optional: If you want to mount plugins from local folder
+      # - ./plugins:/plugins 
+    environment:
+      # Auth
+      - NEO4J_AUTH=${NEO4J_USER}/${NEO4J_PASSWORD}
+      # Memory Settings
+      - NEO4J_server_memory_heap_initial__size=${NEO4J_HEAP_INITIAL}
+      - NEO4J_server_memory_heap_max__size=${NEO4J_HEAP_MAX}
+      - NEO4J_server_memory_pagecache_size=${NEO4J_PAGECACHE}
+      # Native plugins
+      - NEO4J_PLUGINS=${NEO4J_PLUGINS_LIST}
+      # Sandboxing
+      - NEO4J_dbms_security_procedures_unrestricted=${NEO4J_SECURE_PROCS}
+      - NEO4J_dbms_security_procedures_allowlist=${NEO4J_SECURE_PROCS}
+      # Configs
+      - NEO4J_dbms_shell_enabled=true
+      - NEO4J_server_directories_import=import
+      - NEO4J_dbms_security_allow__csv__import__from__file__urls=true
+    networks:
+      - graph-net
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider localhost:7474 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  jupyter:
+    container_name: ${PROJECT_NAME}_notebooks
+    build:
+      context: .
+      dockerfile: jupyter/Dockerfile
+      args:
+        JUPYTER_TAG: ${JUPYTER_TAG}
+    ports:
+      - "${JUPYTER_PORT}:8888"
+    volumes:
+      - ./notebooks:/home/jovyan/work
+      - ./import:/home/jovyan/import
+    environment:
+      - JUPYTER_ENABLE_LAB=yes      
+      # Neo4j connection settings
+      - NEO4J_URI=bolt://neo4j:${NEO4J_BOLT_PORT}
+      - NEO4J_USER=${NEO4J_USER}
+      - NEO4J_PASSWORD=${NEO4J_PASSWORD}
+    networks:
+      - graph-net
+networks:
+  graph-net:

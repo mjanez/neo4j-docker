@@ -1,0 +1,3 @@
+# neo4j/neo4j.conf
+dbms.logs.query.enabled=true
+dbms.logs.query.threshold=100ms

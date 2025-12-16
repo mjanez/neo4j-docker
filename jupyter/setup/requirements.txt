@@ -1,0 +1,13 @@
+# Official Neo4j Python Driver
+neo4j>=5.26.0
+
+# Semantics
+rdflib
+owlrl
+
+# Semantic Enrichment / NLP
+spacy
+
+# Visualization
+yfiles_jupyter_graphs
+graphviz
