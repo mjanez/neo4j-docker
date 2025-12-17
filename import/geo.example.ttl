@@ -1,0 +1,11 @@
+@prefix geo: <http://mycompany.com/ontology/geo#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+:GeoOntology rdf:type owl:Ontology .
+
+geo:Location rdf:type owl:Class .
+
+geo:locatedIn rdf:type owl:ObjectProperty ;
+    rdfs:domain owl:Thing ;
+    rdfs:range geo:Location .
