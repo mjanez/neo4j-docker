@@ -9,3 +9,8 @@ logs/*
 plugins/*
 !plugins/.gitkeep
 import/*.tmp
+
+# IDE
+.DS_Store
+.vscode
+.idea
