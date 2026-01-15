@@ -1,0 +1,16 @@
+*.env
+!.env.example
+
+# Git
+data/*
+!data/.gitkeep
+logs/*
+!logs/.gitkeep
+plugins/*
+!plugins/.gitkeep
+import/*.tmp
+
+# IDE
+.DS_Store
+.vscode
+.idea

@@ -1,0 +1,25 @@
+@prefix : <http://mycompany.com/ontology/scm#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:SupplyChainOntology rdf:type owl:Ontology .
+
+:DistributionCenter rdf:type owl:Class ; rdfs:label "Centro de Distribución"@es .
+:Factory rdf:type owl:Class ; rdfs:label "Fábrica"@es .
+:Product rdf:type owl:Class ; rdfs:label "Producto"@es .
+
+# --- Properties ---
+:supplies rdf:type owl:ObjectProperty ;
+    rdfs:domain :Factory ;
+    rdfs:range :Product ;
+    rdfs:label "Suministra"@es .
+
+:shippedTo rdf:type owl:ObjectProperty ;
+    rdfs:domain :DistributionCenter ;
+    rdfs:range :DistributionCenter ;
+    rdfs:label "Enviado a"@es .
+
+:hasStock rdf:type owl:DatatypeProperty ;
+    rdfs:domain :DistributionCenter ;
+    rdfs:range xsd:integer .
